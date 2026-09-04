@@ -1,0 +1,44 @@
+﻿@model UrunStokPaneli.Models.Product
+
+<h1>Ürün Ekle</h1
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Ürün Kodu</label>
+        <input asp-for="ProductCode" />
+    </div>
+
+    <div>
+        <label>Ürün Adı</label>
+        <input asp-for="ProductName" />
+    </div>
+
+    <div>
+        <label>Stok Miktarı</label>
+        <input asp-for="StockQuantity" />
+    </div>
+
+    <div>
+        <label>Birim</label>
+        <input asp-for="Unit" />
+    </div>
+
+    <div>
+        <label>Kategori</label>
+
+        <select asp-for="CategoryId">
+            <option value="">Kategori Seçiniz</option>
+
+            <!-- Controller'da hazırladığımız: ViewBag.Categories = categories; burada kullanılıyor. -->
+            @foreach (var category in ViewBag.Categories)
+            {
+                    <option value="@category.Id">
+                    @category.Name
+                    </option>
+            }
+        </select>
+    </div>
+
+    <button type="submit">Kaydet</button>
+
+</form>

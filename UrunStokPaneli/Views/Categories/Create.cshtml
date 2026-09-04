@@ -1,0 +1,13 @@
+﻿@model UrunStokPaneli.Models.Category //sayfanın tek bir Category nesnesi ile çalışacağını belirttim.
+
+<h1>Kategori Ekle</h1>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Kategori Adı</label>
+        <input asp-for="Name" /> <!-- kullanıcının kategori adını gireceği kutuyu oluşturuyor. -->
+    </div>
+
+    <button type="submit">Kaydet</button> <!-- kullanıcı Kaydet butonuna bastığında bilgilerin CategoriesController içerisindeki 
+                                           Create metoduna POST olarak gönderileceğini söylüyor. -->
+</form>

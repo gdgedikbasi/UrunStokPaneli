@@ -13,5 +13,8 @@
         public string Unit { get; set; } //excel tablosundaki birim
 
         public int CategoryId { get; set; } //excel tablosundaki kategori
+
+        public Category Category { get; set; } // Ürünün bağlı olduğu kategori
+                                               // Mesela bir ürünün CategoryId değeri 1" demek yerine, veritabanındaki 1 numaralı kategorinin adını da kullanabileceğiz.
     }
 }
