@@ -1,0 +1,31 @@
+﻿@model UrunStokPaneli.Models.Product
+
+<h1>Ürün Sil</h1>
+
+<p>Bu ürünü silmek istediğinize emin misiniz?</p>
+
+<p>
+    <strong>Ürün Kodu:</strong> @Model.ProductCode
+</p>
+
+<p>
+    <strong>Ürün Adı:</strong> @Model.ProductName
+</p>
+
+<p>
+    <strong>Stok Miktarı:</strong> @Model.StockQuantity @Model.Unit
+</p>
+
+<p>
+    <strong>Kategori:</strong> @Model.Category.Name
+</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit">Sil</button>
+
+    <a asp-action="Index">İptal</a>
+
+</form>
