@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using UrunStokPaneli.Data;
 using UrunStokPaneli.Models;
+using OfficeOpenXml;
 
 namespace UrunStokPaneli.Controllers
 {
@@ -114,7 +115,48 @@ namespace UrunStokPaneli.Controllers
                 return Content("Dosya seçilmedi.");
             }
 
-            return Content("Excel dosyası başarıyla alındı.");
+            ExcelPackage.License.SetNonCommercialPersonal("Duygu"); //EPPlus'a kişisel kullanım lisansını kimin adına ayarladığımızı belirtiyor.
+
+            using (var stream = new MemoryStream())
+            {
+                file.CopyTo(stream); //yüklediğimiz Excel dosyasını bu bellekteki akışa kopyalıyor.
+
+                //Excel dosyasını bilgisayarımıza ayrıca kaydetmeden, yüklenen dosyayı bellekte okumamızı sağlıyor.
+                using (var package = new ExcelPackage(stream)) //"Bu Excel dosyasını aç ve okumama izin ver."
+                {
+                    var worksheet = package.Workbook.Worksheets[0]; //Excel'in ilk çalışma sayfasını (Sheet1) alıyoruz.
+
+                    var rowCount = worksheet.Dimension.Rows;
+
+                    for (int row=2;row<=rowCount;row++)
+                    {
+                        var productCode = worksheet.Cells[row, 1].Value;
+                        var productName= worksheet.Cells[row, 2].Value;
+                        var stockQuantity= worksheet.Cells[row, 3].Value;
+                        var unit= worksheet.Cells[row, 4].Value;
+                        var category= worksheet.Cells[row, 5].Value;
+
+                        var product = new Product
+                        {
+                            ProductCode = productCode.ToString(),
+                            ProductName = productName.ToString(),
+                            StockQuantity = Convert.ToInt32(stockQuantity),
+                            Unit = unit.ToString()
+                        };
+
+                        var categoryEntity = _context.Categories
+                            .FirstOrDefault(c => c.Name == category.ToString());
+
+                        product.CategoryId = categoryEntity.Id;
+
+                        _context.Products.Add(product);
+                        
+                    }
+                    _context.SaveChanges();
+                    
+                    return Content($"Excel'deki {rowCount - 1} ürün okundu.");
+                }
+            }
         }
     }
 }
