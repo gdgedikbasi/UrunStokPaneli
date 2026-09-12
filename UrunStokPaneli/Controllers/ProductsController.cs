@@ -130,12 +130,14 @@ namespace UrunStokPaneli.Controllers
 
                     for (int row=2;row<=rowCount;row++)
                     {
+                        // Excel'den ürün bilgilerini oku
                         var productCode = worksheet.Cells[row, 1].Value;
                         var productName= worksheet.Cells[row, 2].Value;
                         var stockQuantity= worksheet.Cells[row, 3].Value;
                         var unit= worksheet.Cells[row, 4].Value;
                         var category= worksheet.Cells[row, 5].Value;
 
+                        // Excel satırından Product nesnesi oluştur
                         var product = new Product
                         {
                             ProductCode = productCode.ToString(),
@@ -144,12 +146,22 @@ namespace UrunStokPaneli.Controllers
                             Unit = unit.ToString()
                         };
 
+                        // Kategoriyi veritabanından bul
                         var categoryEntity = _context.Categories
                             .FirstOrDefault(c => c.Name == category.ToString());
 
+                        // Bulunan kategorinin Id'sini ürüne bağla
                         product.CategoryId = categoryEntity.Id;
 
-                        _context.Products.Add(product);
+                        //Ürün daha önce eklenmiş mi kontrol et
+                        var existingProduct = _context.Products
+                            .FirstOrDefault(p => p.ProductCode == product.ProductCode);
+
+                        //Ürün daha önce yoksa ekle
+                        if(existingProduct==null)
+                        {
+                            _context.Products.Add(product);
+                        }
                         
                     }
                     _context.SaveChanges();
