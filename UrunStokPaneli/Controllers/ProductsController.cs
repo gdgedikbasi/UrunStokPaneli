@@ -16,13 +16,29 @@ namespace UrunStokPaneli.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string search, int? categoryId)
         {
             var products = _context.Products
                 .Include(p => p.Category)
-                .ToList();
+                .AsQueryable();
 
-            return View(products);
+            // Ürün adına veya ürün koduna göre arama yap
+            if (!string.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => 
+                    p.ProductName.Contains(search) ||
+                    p.ProductCode.Contains(search));
+            }
+
+            //kategoriye göre filtreleme yap
+            if(categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            // Kategorileri filtreleme kutusunda göstermek için getir
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(products.ToList());
         }
 
         //Oluşturma metodu
@@ -37,6 +53,9 @@ namespace UrunStokPaneli.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
+            // Ürün ilk kez eklenirken mevcut stok miktarını ilk stok olarak kaydet.
+            product.InitialStockQuantity = product.StockQuantity;
+
             _context.Products.Add(product); //Product modelinden gelen veriyi Products tablosuna ekledim.
             _context.SaveChanges(); //Değişiklikleri kaydettim.
             return RedirectToAction("Index"); //Index action'ına yönlendirdim.
@@ -61,9 +80,27 @@ namespace UrunStokPaneli.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
-            _context.Products.Update(product);//EF Core'a "Bu ürün mevcut bir ürün, bilgileri güncellendi." diyorum.
-            _context.SaveChanges(); //değişikliği mssql'e kaydediyorum.
-            return RedirectToAction("Index"); //ürün listesine dönüyorum.
+            // Veritabanındaki mevcut ürünü bul
+            var existingProduct = _context.Products.Find(product.Id);
+
+            if (existingProduct == null)
+            {
+                return NotFound();
+            }
+
+            // Sadece değiştirilebilir bilgileri güncelle
+            existingProduct.ProductCode = product.ProductCode;
+            existingProduct.ProductName = product.ProductName;
+            existingProduct.StockQuantity = product.StockQuantity;
+            existingProduct.Unit = product.Unit;
+            existingProduct.CategoryId = product.CategoryId;
+
+            // InitialStockQuantity değiştirilmez.
+            // Çünkü bu değer ürünün sisteme ilk girdiği stok miktarıdır.
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         //Silme Metodu
@@ -137,12 +174,21 @@ namespace UrunStokPaneli.Controllers
                         var unit= worksheet.Cells[row, 4].Value;
                         var category= worksheet.Cells[row, 5].Value;
 
+
+                        // Zorunlu alanlardan biri boşsa bu satırı atla
+                        if (productCode == null || productName == null || stockQuantity == null ||
+                            unit == null || category == null)
+                        {
+                            continue;
+                        }
+
                         // Excel satırından Product nesnesi oluştur
                         var product = new Product
                         {
                             ProductCode = productCode.ToString(),
                             ProductName = productName.ToString(),
-                            StockQuantity = Convert.ToInt32(stockQuantity),
+                            StockQuantity = Convert.ToInt32(stockQuantity), //mevcut stok miktarını kaydet
+                            InitialStockQuantity = Convert.ToInt32(stockQuantity), //ürünün sisteme ilk girilen stok miktarını kaydet
                             Unit = unit.ToString()
                         };
 
