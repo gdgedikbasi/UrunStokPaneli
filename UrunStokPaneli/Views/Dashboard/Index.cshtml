@@ -1,0 +1,34 @@
+﻿@model UrunStokPaneli.Models.DashboardViewModel
+
+<h1>Dashboard</h1>
+
+<p>Toplam Ürün Sayısı: @Model.TotalProducts</p>
+
+<p>Toplam Stok Miktarı: @Model.TotalStock</p>
+
+<h2>Kategori Sayıları</h2>
+
+@foreach (var category in Model.CategoryProductCounts)
+{
+        <p>
+        @category.CategoryName: @category.ProductCount ürün
+        </p>
+}
+
+<h2>Düşük Stoklu Ürünler</h2>
+
+@if (Model.LowStockProducts.Any())
+{
+        <ul>
+        @foreach (var product in Model.LowStockProducts)
+        {
+                    <li>
+                @product.ProductName - Mevcut Stok: @product.StockQuantity
+                    </li>
+        }
+        </ul>
+}
+else
+{
+        <p>Düşük stoklu ürün bulunmuyor.</p>
+}
