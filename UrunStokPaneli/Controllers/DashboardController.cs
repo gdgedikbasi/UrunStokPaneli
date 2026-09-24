@@ -20,7 +20,7 @@ namespace UrunStokPaneli.Controllers
             var totalProducts = _context.Products.Count();
 
             // Tüm ürünlerin toplam stok miktarını hesapla
-            var totalStock = _context.Products.Sum(p => p.StockQuantity);
+            var totalStock = _context.Products.Sum(p => p.StockQuantity)??0;
 
             // Kategorilere göre ürün sayılarını hesapla
             var categoryProductCounts = _context.Products

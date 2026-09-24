@@ -53,8 +53,16 @@ namespace UrunStokPaneli.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
+            //formdaki bilgilerin validation kurallarına uygun olup olmadığını kontrol ettim.
+            if(!ModelState.IsValid)
+            {
+                //kategorileri tekrar forma gönder
+                ViewBag.Categories = _context.Categories.ToList();
+                //hatalar varsa ürünü kaydetmeden forma geri dön
+                return View(product);
+            }
             // Ürün ilk kez eklenirken mevcut stok miktarını ilk stok olarak kaydet.
-            product.InitialStockQuantity = product.StockQuantity;
+            product.InitialStockQuantity = product.StockQuantity.Value;
 
             _context.Products.Add(product); //Product modelinden gelen veriyi Products tablosuna ekledim.
             _context.SaveChanges(); //Değişiklikleri kaydettim.
@@ -80,6 +88,17 @@ namespace UrunStokPaneli.Controllers
         [HttpPost]
         public IActionResult Edit(Product product)
         {
+            // Formdaki bilgilerin validation kurallarına uygun olup olmadığını kontrol et
+            if (!ModelState.IsValid)
+            {
+                // Kategorileri tekrar forma gönder
+                ViewBag.Categories = _context.Categories.ToList();
+
+                // Hatalar varsa ürünü güncellemeden forma geri dön
+                return View(product);
+            }
+
+
             // Veritabanındaki mevcut ürünü bul
             var existingProduct = _context.Products.Find(product.Id);
 
@@ -152,66 +171,137 @@ namespace UrunStokPaneli.Controllers
                 return Content("Dosya seçilmedi.");
             }
 
-            ExcelPackage.License.SetNonCommercialPersonal("Duygu"); //EPPlus'a kişisel kullanım lisansını kimin adına ayarladığımızı belirtiyor.
+            // Sadece Excel dosyalarını kabul et
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (extension != ".xlsx")
+            {
+                return Content("Lütfen .xlsx uzantılı bir Excel dosyası seçin.");
+            }
+
+            ExcelPackage.License.SetNonCommercialPersonal("Duygu");
 
             using (var stream = new MemoryStream())
             {
-                file.CopyTo(stream); //yüklediğimiz Excel dosyasını bu bellekteki akışa kopyalıyor.
+                file.CopyTo(stream);
 
-                //Excel dosyasını bilgisayarımıza ayrıca kaydetmeden, yüklenen dosyayı bellekte okumamızı sağlıyor.
-                using (var package = new ExcelPackage(stream)) //"Bu Excel dosyasını aç ve okumama izin ver."
+                using (var package = new ExcelPackage(stream))
                 {
-                    var worksheet = package.Workbook.Worksheets[0]; //Excel'in ilk çalışma sayfasını (Sheet1) alıyoruz.
+                    // Excel dosyasında çalışma sayfası var mı kontrol et
+                    if (package.Workbook.Worksheets.Count == 0)
+                    {
+                        return Content("Excel dosyasında çalışma sayfası bulunamadı.");
+                    }
+
+                    var worksheet = package.Workbook.Worksheets[0];
+
+                    // Excel sayfası tamamen boş mu kontrol et
+                    if (worksheet.Dimension == null)
+                    {
+                        return Content("Excel çalışma sayfası boş.");
+                    }
 
                     var rowCount = worksheet.Dimension.Rows;
 
-                    for (int row=2;row<=rowCount;row++)
+                    for (int row = 2; row <= rowCount; row++)
                     {
-                        // Excel'den ürün bilgilerini oku
-                        var productCode = worksheet.Cells[row, 1].Value;
-                        var productName= worksheet.Cells[row, 2].Value;
-                        var stockQuantity= worksheet.Cells[row, 3].Value;
-                        var unit= worksheet.Cells[row, 4].Value;
-                        var category= worksheet.Cells[row, 5].Value;
+                        // Excel hücrelerindeki değerleri metin olarak al
+                        var productCode = worksheet.Cells[row, 1].Text?.Trim();
+                        var productName = worksheet.Cells[row, 2].Text?.Trim();
+                        var stockQuantity = worksheet.Cells[row, 3].Text?.Trim();
+                        var unit = worksheet.Cells[row, 4].Text?.Trim();
+                        var category = worksheet.Cells[row, 5].Text?.Trim();
 
+                        // Boş alanları kontrol et
+                        var missingFields = new List<string>();
 
-                        // Zorunlu alanlardan biri boşsa bu satırı atla
-                        if (productCode == null || productName == null || stockQuantity == null ||
-                            unit == null || category == null)
+                        if (string.IsNullOrWhiteSpace(productCode))
                         {
-                            continue;
+                            missingFields.Add("Ürün Kodu");
                         }
 
-                        // Excel satırından Product nesnesi oluştur
+                        if (string.IsNullOrWhiteSpace(productName))
+                        {
+                            missingFields.Add("Ürün Adı");
+                        }
+
+                        if (string.IsNullOrWhiteSpace(stockQuantity))
+                        {
+                            missingFields.Add("Stok Miktarı");
+                        }
+
+                        if (string.IsNullOrWhiteSpace(unit))
+                        {
+                            missingFields.Add("Birim");
+                        }
+
+                        if (string.IsNullOrWhiteSpace(category))
+                        {
+                            missingFields.Add("Kategori");
+                        }
+
+                        // Eksik alan varsa kullanıcıya bildir
+                        if (missingFields.Any())
+                        {
+                            return Content(
+                                $"Excel'deki {row}. satırda şu alanlar boş: {string.Join(", ", missingFields)}"
+                            );
+                        }
+
+                        // Stok miktarını sayıya çevirmeyi dene
+                        if (!int.TryParse(stockQuantity, out int stock))
+                        {
+                            return Content(
+                                $"Excel'deki {row}. satırda stok miktarı geçersiz: {stockQuantity}"
+                            );
+                        }
+
+                        // Stok miktarı negatif olamaz
+                        if (stock < 0)
+                        {
+                            return Content(
+                                $"Excel'deki {row}. satırda stok miktarı 0'dan küçük olamaz: {stock}"
+                            );
+                        }
+
+                        // Yeni ürün oluştur
                         var product = new Product
                         {
-                            ProductCode = productCode.ToString(),
-                            ProductName = productName.ToString(),
-                            StockQuantity = Convert.ToInt32(stockQuantity), //mevcut stok miktarını kaydet
-                            InitialStockQuantity = Convert.ToInt32(stockQuantity), //ürünün sisteme ilk girilen stok miktarını kaydet
-                            Unit = unit.ToString()
+                            ProductCode = productCode,
+                            ProductName = productName,
+                            StockQuantity = stock,
+                            InitialStockQuantity = stock,
+                            Unit = unit
                         };
 
                         // Kategoriyi veritabanından bul
                         var categoryEntity = _context.Categories
-                            .FirstOrDefault(c => c.Name == category.ToString());
+                            .FirstOrDefault(c => c.Name == category);
 
-                        // Bulunan kategorinin Id'sini ürüne bağla
+                        // Kategori bulunamadıysa hata ver
+                        if (categoryEntity == null)
+                        {
+                            return Content(
+                                $"Excel'deki {row}. satırda kategori bulunamadı: {category}"
+                            );
+                        }
+
                         product.CategoryId = categoryEntity.Id;
 
-                        //Ürün daha önce eklenmiş mi kontrol et
+                        // Ürün daha önce eklenmiş mi kontrol et
                         var existingProduct = _context.Products
                             .FirstOrDefault(p => p.ProductCode == product.ProductCode);
 
-                        //Ürün daha önce yoksa ekle
-                        if(existingProduct==null)
+                        // Daha önce yoksa ekle
+                        if (existingProduct == null)
                         {
                             _context.Products.Add(product);
                         }
-                        
                     }
+
+                    // Tüm satırlar kontrol edildikten sonra tek seferde kaydet
                     _context.SaveChanges();
-                    
+
                     return Content($"Excel'deki {rowCount - 1} ürün okundu.");
                 }
             }

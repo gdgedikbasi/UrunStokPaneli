@@ -3,24 +3,30 @@
 <h1>Ürün Ekle</h1>
 
 <form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div>
         <label>Ürün Kodu</label>
         <input asp-for="ProductCode" />
+        <span asp-validation-for="ProductCode" class="text-danger"></span>
     </div>
 
     <div>
         <label>Ürün Adı</label>
         <input asp-for="ProductName" />
+        <span asp-validation-for="ProductName" class="text-danger"></span>
     </div>
 
     <div>
         <label>Stok Miktarı</label>
         <input asp-for="StockQuantity" />
+        <span asp-validation-for="StockQuantity" class="text-danger"></span>
     </div>
 
     <div>
         <label>Birim</label>
         <input asp-for="Unit" />
+        <span asp-validation-for="Unit" class="text-danger"></span>
     </div>
 
     <div>
@@ -37,6 +43,7 @@
                     </option>
             }
         </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
     <button type="submit">Kaydet</button>
