@@ -1,6 +1,12 @@
 ﻿@model UrunStokPaneli.Models.Product
 
 <h1>Ürün Ekle</h1>
+@if (ViewBag.ErrorMessage != null)
+{
+        <div style="color:red; margin-bottom:20px;">
+        @ViewBag.ErrorMessage
+        </div>
+}
 
 <form asp-action="Create" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>

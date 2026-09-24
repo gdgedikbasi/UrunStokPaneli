@@ -53,21 +53,37 @@ namespace UrunStokPaneli.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
-            //formdaki bilgilerin validation kurallarına uygun olup olmadığını kontrol ettim.
-            if(!ModelState.IsValid)
+            // Formdaki bilgilerin validation kurallarına uygun olup olmadığını kontrol et
+            if (!ModelState.IsValid)
             {
-                //kategorileri tekrar forma gönder
+                // Validation hatalarını ekranda göster
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .Select(x => $"{x.Key}: {string.Join(", ", x.Value.Errors.Select(e => e.ErrorMessage))}")
+                    .ToList();
+
+                // Hataları ekranda göstermek için birleştir
+                var errorMessage = string.Join(" | ", errors);
+
+                // Kategorileri tekrar forma gönder
                 ViewBag.Categories = _context.Categories.ToList();
-                //hatalar varsa ürünü kaydetmeden forma geri dön
+
+                // Hata mesajını View'a gönder
+                ViewBag.ErrorMessage = errorMessage;
+
                 return View(product);
             }
-            // Ürün ilk kez eklenirken mevcut stok miktarını ilk stok olarak kaydet.
+
+            // Ürün ilk kez eklenirken mevcut stok miktarını ilk stok olarak kaydet
             product.InitialStockQuantity = product.StockQuantity.Value;
 
-            _context.Products.Add(product); //Product modelinden gelen veriyi Products tablosuna ekledim.
-            _context.SaveChanges(); //Değişiklikleri kaydettim.
-            return RedirectToAction("Index"); //Index action'ına yönlendirdim.
+            // Ürünü veritabanına ekle
+            _context.Products.Add(product);
 
+            // Değişiklikleri veritabanına kaydet
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         //Düzenleme metodu
