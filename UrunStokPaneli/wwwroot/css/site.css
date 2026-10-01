@@ -1,22 +1,701 @@
+/* =========================================
+   GENEL
+========================================= */
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+html,
+body {
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    background-color: #f5f7fb;
+    color: #1f2937;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+
+/* =========================================
+   SOL MENÜ
+========================================= */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: #111827;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+
+/* Logo */
+
+.sidebar-logo {
+    height: 82px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.logo-icon {
+    width: 38px;
+    height: 38px;
+    background: #2563eb;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-right: 12px;
+}
+
+.logo-title {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.logo-subtitle {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+
+/* Menü */
+
+.sidebar-menu {
+    padding: 25px 14px;
+}
+
+.menu-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #6b7280;
+    letter-spacing: 1px;
+    padding: 0 12px;
+    margin-bottom: 9px;
+    margin-top: 18px;
+}
+
+    .menu-title:first-child {
+        margin-top: 0;
+    }
+
+.menu-item {
+    height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+    margin-bottom: 5px;
+    color: #9ca3af;
+    text-decoration: none;
+    border-radius: 9px;
+    transition: all 0.2s ease;
+}
+
+    .menu-item:hover {
+        background: #1f2937;
+        color: white;
+    }
+
+    .menu-item:first-of-type {
+        background: #2563eb;
+        color: white;
+    }
+
+.menu-icon {
+    width: 28px;
+    font-size: 18px;
+    margin-right: 8px;
+    text-align: center;
+}
+
+
+/* Alt Bilgi */
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 18px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-info {
+    display: flex;
+    align-items: center;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    background: #22c55e;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.system-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.system-subtitle {
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   ANA ALAN
+========================================= */
+
+.main-wrapper {
+    margin-left: 250px;
+    min-height: 100vh;
+}
+
+
+/* =========================================
+   ÜST BAR
+========================================= */
+
+.topbar {
+    height: 82px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 35px;
+}
+
+.page-heading {
+    font-size: 21px;
+    font-weight: 700;
+    color: #111827;
+}
+
+
+/* Kullanýcý */
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    background: #dbeafe;
+    color: #2563eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.user-role {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   ÝÇERÝK
+========================================= */
+
+.content-area {
+    padding: 32px 35px;
+}
+
+
+/* =========================================
+   KARTLAR
+========================================= */
+
+.dashboard-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+
+/* =========================================
+   BUTONLAR
+========================================= */
+
+.btn-primary {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+
+
+/* =========================================
+   TABLO
+========================================= */
+
+.table-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+    .table-card table {
+        margin-bottom: 0;
+    }
+
+    .table-card thead {
+        background: #f8fafc;
+    }
+
+    .table-card th {
+        border-bottom: 1px solid #e5e7eb;
+        color: #6b7280;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        padding: 15px;
+    }
+
+    .table-card td {
+        padding: 15px;
+        vertical-align: middle;
+        border-color: #f1f5f9;
+        font-size: 14px;
+    }
+
+
+/* =========================================
+   STOK DURUMLARI
+========================================= */
+
+.stock-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.stock-success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.stock-warning {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.stock-danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #374151;
+}
+
+.form-control,
+.form-select {
+    border-color: #d1d5db;
+    border-radius: 8px;
+    min-height: 42px;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+
+/* =========================================
+   MOBÝL
+========================================= */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .sidebar-menu {
+        padding-bottom: 10px;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main-wrapper {
+        margin-left: 0;
+    }
+
+    .topbar {
+        padding: 0 20px;
+    }
+
+    .content-area {
+        padding: 20px;
+    }
+
+    .user-text {
+        display: none;
+    }
+}
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+    .dashboard-header h1 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .dashboard-header p {
+        margin: 6px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+.dashboard-add-button {
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   ÝSTATÝSTÝK KARTLARI
+========================================= */
+
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    min-height: 130px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+    }
+
+
+/* Ýkon */
+
+.stat-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 17px;
+}
+
+    .stat-icon.blue {
+        background: #dbeafe;
+    }
+
+    .stat-icon.green {
+        background: #dcfce7;
+    }
+
+    .stat-icon.orange {
+        background: #fef3c7;
+    }
+
+
+/* Yazýlar */
+
+.stat-label {
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    color: #111827;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-description {
+    color: #9ca3af;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+
+/* =========================================
+   DASHBOARD KARTLARI
+========================================= */
+
+.dashboard-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 24px;
+    height: 100%;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+
+/* Baþlýk */
+
+.card-header-custom {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+    .card-header-custom h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .card-header-custom p {
+        margin: 5px 0 0;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+.category-count {
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.warning-count {
+    background: #fef3c7;
+    color: #b45309;
+    border-radius: 20px;
+    padding: 5px 10px;
+    min-width: 28px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   KATEGORÝ LÝSTESÝ
+========================================= */
+
+.category-row {
+    margin-bottom: 20px;
+}
+
+    .category-row:last-child {
+        margin-bottom: 0;
+    }
+
+.category-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.category-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.category-product-count {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.category-progress {
+    height: 7px;
+    background: #f1f5f9;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.category-progress-bar {
+    height: 100%;
+    background: #2563eb;
+    border-radius: 20px;
+    min-width: 5px;
+}
+
+
+/* =========================================
+   DÜÞÜK STOK LÝSTESÝ
+========================================= */
+
+.low-stock-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.low-stock-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+    .low-stock-item:last-child {
+        border-bottom: none;
+    }
+
+.product-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-code {
+    font-size: 10px;
+    color: #9ca3af;
+    margin-top: 3px;
+}
+
+.stock-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #fef2f2;
+    border-radius: 7px;
+    padding: 5px 9px;
+}
+
+.stock-number {
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.stock-unit {
+    color: #ef4444;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   BOÞ DURUM
+========================================= */
+
+.empty-state {
+    padding: 35px 10px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.success-state {
+    color: #16a34a;
+    background: #f0fdf4;
+    border-radius: 8px;
+}
+
+
+/* =========================================
+   DASHBOARD MOBÝL
+========================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .dashboard-add-button {
+        width: 100%;
+    }
+
+    .stat-card {
+        min-height: 110px;
+    }
 }

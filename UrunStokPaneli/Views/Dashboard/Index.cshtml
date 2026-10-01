@@ -1,34 +1,284 @@
 ﻿@model UrunStokPaneli.Models.DashboardViewModel
 
-<h1>Dashboard</h1>
+@{
+    ViewData["Title"] = "Dashboard";
 
-<p>Toplam Ürün Sayısı: @Model.TotalProducts</p>
+    // Düşük stoklu ürün sayısını hesaplıyoruz.
+    var lowStockCount = Model.LowStockProducts.Count;
 
-<p>Toplam Stok Miktarı: @Model.TotalStock</p>
+    // Kategori sayısını hesaplıyoruz.
+    var categoryCount = Model.CategoryProductCounts.Count;
 
-<h2>Kategori Sayıları</h2>
+    // Grafik için en yüksek kategori ürün sayısını buluyoruz.
+    var maxCategoryCount = Model.CategoryProductCounts.Any()
+        ? Model.CategoryProductCounts.Max(x => x.ProductCount)
+        : 1;
+}
 
-@foreach (var category in Model.CategoryProductCounts)
-{
+
+<!-- Sayfa Başlığı -->
+<div class="dashboard-header">
+
+    <div>
+        <h1>Genel Bakış</h1>
+
         <p>
-        @category.CategoryName: @category.ProductCount ürün
+            Ürün ve stok durumunuzu buradan takip edebilirsiniz.
         </p>
-}
+    </div>
 
-<h2>Düşük Stoklu Ürünler</h2>
+    <a asp-controller="Products"
+       asp-action="Create"
+       class="btn btn-primary dashboard-add-button">
 
-@if (Model.LowStockProducts.Any())
-{
-        <ul>
-        @foreach (var product in Model.LowStockProducts)
-        {
-                    <li>
-                @product.ProductName - Mevcut Stok: @product.StockQuantity
-                    </li>
-        }
-        </ul>
-}
-else
-{
-        <p>Düşük stoklu ürün bulunmuyor.</p>
-}
+        + Yeni Ürün
+
+    </a>
+
+</div>
+
+
+<!-- İstatistik Kartları -->
+<div class="row g-4 mb-4">
+
+
+    <!-- Toplam Ürün -->
+    <div class="col-md-4">
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                📦
+            </div>
+
+            <div class="stat-content">
+
+                <div class="stat-label">
+                    Toplam Ürün
+                </div>
+
+                <div class="stat-value">
+                    @Model.TotalProducts
+                </div>
+
+                <div class="stat-description">
+                    Sistemde kayıtlı ürün
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Toplam Stok -->
+    <div class="col-md-4">
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+                📊
+            </div>
+
+            <div class="stat-content">
+
+                <div class="stat-label">
+                    Toplam Stok
+                </div>
+
+                <div class="stat-value">
+                    @Model.TotalStock
+                </div>
+
+                <div class="stat-description">
+                    Toplam ürün miktarı
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Düşük Stok -->
+    <div class="col-md-4">
+
+        <div class="stat-card">
+
+            <div class="stat-icon orange">
+                ⚠
+            </div>
+
+            <div class="stat-content">
+
+                <div class="stat-label">
+                    Düşük Stok
+                </div>
+
+                <div class="stat-value">
+                    @lowStockCount
+                </div>
+
+                <div class="stat-description">
+                    Dikkat edilmesi gereken ürün
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Alt Bölüm -->
+<div class="row g-4">
+
+
+    <!-- Kategori Dağılımı -->
+    <div class="col-lg-7">
+
+        <div class="dashboard-card category-card">
+
+            <div class="card-header-custom">
+
+                <div>
+                    <h3>Kategori Dağılımı</h3>
+
+                    <p>
+                        Ürünlerin kategorilere göre dağılımı
+                    </p>
+                </div>
+
+                <div class="category-count">
+                    @categoryCount kategori
+                </div>
+
+            </div>
+
+
+            @if (Model.CategoryProductCounts.Any())
+            {
+                    <div class="category-list">
+
+                    @foreach (var category in Model.CategoryProductCounts)
+                    {
+                        var percentage = maxCategoryCount > 0
+                            ? (category.ProductCount * 100.0 / maxCategoryCount)
+                            : 0;
+
+                                <div class="category-row">
+
+                                    <div class="category-row-top">
+
+                                        <span class="category-name">
+                                    @category.CategoryName
+                                        </span>
+
+                                        <span class="category-product-count">
+                                    @category.ProductCount ürün
+                                        </span>
+
+                                    </div>
+
+                                    <div class="category-progress">
+
+                                        <div class="category-progress-bar"
+                                             style="width: @percentage%">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                    }
+
+                    </div>
+            }
+            else
+            {
+                    <div class="empty-state">
+                        Henüz kategori bulunmuyor.
+                    </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- Düşük Stoklu Ürünler -->
+    <div class="col-lg-5">
+
+        <div class="dashboard-card low-stock-card">
+
+            <div class="card-header-custom">
+
+                <div>
+                    <h3>Düşük Stoklu Ürünler</h3>
+
+                    <p>
+                        Stok kontrolü gereken ürünler
+                    </p>
+                </div>
+
+                <div class="warning-count">
+                    @lowStockCount
+                </div>
+
+            </div>
+
+
+            @if (Model.LowStockProducts.Any())
+            {
+                    <div class="low-stock-list">
+
+                    @foreach (var product in Model.LowStockProducts)
+                    {
+                                <div class="low-stock-item">
+
+                                    <div class="product-info">
+
+                                        <div class="product-name">
+                                    @product.ProductName
+                                        </div>
+
+                                        <div class="product-code">
+                                    @product.ProductCode
+                                        </div>
+
+                                    </div>
+
+                                    <div class="stock-info">
+
+                                        <span class="stock-number">
+                                    @product.StockQuantity
+                                        </span>
+
+                                        <span class="stock-unit">
+                                    @product.Unit
+                                        </span>
+
+                                    </div>
+
+                                </div>
+                    }
+
+                    </div>
+            }
+            else
+            {
+                    <div class="empty-state success-state">
+
+                        ✓ Düşük stoklu ürün bulunmuyor.
+
+                    </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
