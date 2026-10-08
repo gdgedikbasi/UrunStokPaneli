@@ -699,3 +699,293 @@ body {
         min-height: 110px;
     }
 }
+
+/* =========================================
+   ÜRÜNLER SAYFASI
+========================================= */
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .page-header p {
+        margin: 6px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+.page-header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+    .page-header-actions .btn {
+        border-radius: 8px;
+        padding: 9px 15px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+
+/* =========================================
+   FÝLTRE KARTI
+========================================= */
+
+.filter-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.filter-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.search-box {
+    position: relative;
+}
+
+    .search-box .form-control {
+        padding-left: 38px;
+    }
+
+.search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.filter-button {
+    width: 100%;
+    min-height: 42px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   ÜRÜN TABLOSU
+========================================= */
+
+.products-table-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.products-table-header {
+    padding: 20px 22px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+    .products-table-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .products-table-header p {
+        margin: 4px 0 0;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+.products-table {
+    margin: 0;
+}
+
+    .products-table thead {
+        background: #f8fafc;
+    }
+
+    .products-table th {
+        padding: 13px 16px;
+        border-bottom: 1px solid #e5e7eb;
+        color: #6b7280;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        white-space: nowrap;
+    }
+
+    .products-table td {
+        padding: 14px 16px;
+        vertical-align: middle;
+        border-color: #f1f5f9;
+        color: #4b5563;
+        font-size: 13px;
+    }
+
+    .products-table tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+        .products-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+
+/* =========================================
+   TABLO ÜRÜN BÝLGÝLERÝ
+========================================= */
+
+.product-code-badge {
+    display: inline-block;
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-family: Consolas, monospace;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.table-product-name {
+    color: #111827;
+    font-weight: 600;
+    max-width: 190px;
+}
+
+.category-badge {
+    display: inline-block;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.stock-amount {
+    color: #111827;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.initial-stock {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   ÝÞLEM BUTONLARI
+========================================= */
+
+.table-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 9px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.edit-button {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+    .edit-button:hover {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+.delete-button {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+    .delete-button:hover {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+
+/* =========================================
+   ÜRÜN YOK
+========================================= */
+
+.products-empty {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.empty-icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.products-empty h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #374151;
+}
+
+.products-empty p {
+    margin: 7px 0 0;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   ÜRÜNLER MOBÝL
+========================================= */
+
+@media (max-width: 768px) {
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .page-header-actions {
+        width: 100%;
+    }
+
+        .page-header-actions .btn {
+            flex: 1;
+        }
+
+    .filter-card {
+        padding: 18px;
+    }
+}

@@ -1,64 +1,233 @@
-﻿@model List<UrunStokPaneli.Models.Product> // Bu sayfa Product listesini alır.
+﻿@model List<UrunStokPaneli.Models.Product>
 
-<h1>Ürünler</h1>
+@{
+    ViewData["Title"] = "Ürünler";
+}
 
-<!-- Ürün arama ve kategori filtreleme -->
-<form asp-action="Index" method="get">
+<div class="page-header">
+    <div>
+        <h1>Ürünler</h1>
+        <p>Sistemde kayıtlı ürünleri görüntüleyin ve yönetin.</p>
+    </div>
 
-    <input type="text"
-           name="search"
-           placeholder="Ürün adı veya kodu ara..." />
+    <div class="page-header-actions">
+        <a asp-controller="Products"
+           asp-action="Import"
+           class="btn btn-outline-primary">
+            ↑ Excel Aktar
+        </a>
 
-    <select name="categoryId">
-        <option value="">Tüm Kategoriler</option>
+        <a asp-controller="Products"
+           asp-action="Create"
+           class="btn btn-primary">
+            + Yeni Ürün
+        </a>
+    </div>
+</div>
 
-        @foreach (var category in ViewBag.Categories)
-        {
-                <option value="@category.Id">
-                @category.Name
-                </option>
-        }
-    </select>
+<div class="filter-card">
+    <form asp-controller="Products" asp-action="Index" method="get">
 
-    <button type="submit">Filtrele</button>
+        <div class="row g-3 align-items-end">
 
-</form>
+            <div class="col-lg-6">
+                <label class="filter-label">Ürün Ara</label>
 
-<br />
+                <div class="search-box">
+                    <span class="search-icon">⌕</span>
 
-<table>
-    <thead>
-        <tr>
-            <th>Ürün Kodu</th>
-            <th>Ürün Adı</th>
-            <th>Stok Miktarı</th>
-            <th>İlk Stok Miktarı</th>
-            <th>Stok Durumu</th>
-            <th>Birim</th>
-            <th>Kategori</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
+                    <input type="text"
+                           name="search"
+                           value="@Context.Request.Query["search"]"
+                           class="form-control"
+                           placeholder="Ürün adı veya ürün kodu ara..." />
+                </div>
+            </div>
 
-    <tbody>
-        <!-- Listedeki her ürünü tek tek ekrana yazdırıyorum. -->
-        @foreach (var product in Model)
-        {
-                <tr>
-                    <td>@product.ProductCode</td>
-                    <td>@product.ProductName</td>
-                    <td>@product.StockQuantity</td>
-                    <td>@product.InitialStockQuantity</td>
-                    <td>@product.StockStatus</td>
-                    <td>@product.Unit</td>
-                    <td>@product.Category.Name</td>
+            <div class="col-lg-4">
+                <label class="filter-label">Kategori</label>
 
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@product.Id">Düzenle</a>
-                        |
-                        <a asp-action="Delete" asp-route-id="@product.Id">Sil</a>
-                    </td>
-                </tr>
-        }
-    </tbody>
-</table>
+                <select name="categoryId" class="form-select">
+                    <option value="">Tüm Kategoriler</option>
+
+                    @if (ViewBag.Categories != null)
+                    {
+                        foreach (var category in ViewBag.Categories)
+                        {
+                            var selected = Context.Request.Query["categoryId"] == category.Id.ToString();
+
+                            if (selected)
+                            {
+                                            <option value="@category.Id" selected>
+                                    @category.Name
+                                            </option>
+                            }
+                            else
+                            {
+                                            <option value="@category.Id">
+                                    @category.Name
+                                            </option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <button type="submit" class="btn btn-primary filter-button">
+                    Filtrele
+                </button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<div class="products-table-card">
+
+    <div class="products-table-header">
+        <div>
+            <h3>Ürün Listesi</h3>
+            <p>@Model.Count ürün listeleniyor</p>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+            <div class="table-responsive">
+
+                <table class="table products-table">
+
+                    <thead>
+                        <tr>
+                            <th>Ürün Kodu</th>
+                            <th>Ürün Adı</th>
+                            <th>Kategori</th>
+                            <th>Mevcut Stok</th>
+                            <th>Başlangıç Stoku</th>
+                            <th>Birim</th>
+                            <th>Durum</th>
+                            <th class="text-end">İşlemler</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    @foreach (var product in Model)
+                    {
+                                <tr>
+
+                                    <td>
+                                        <span class="product-code-badge">
+                                    @product.ProductCode
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="table-product-name">
+                                    @product.ProductName
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                @if (product.Category != null)
+                                {
+                                                <span class="category-badge">
+                                        @product.Category.Name
+                                                </span>
+                                }
+                                else
+                                {
+                                                <span class="text-muted">
+                                                    Kategori yok
+                                                </span>
+                                }
+                                    </td>
+
+                                    <td>
+                                        <span class="stock-amount">
+                                    @product.StockQuantity
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="initial-stock">
+                                    @product.InitialStockQuantity
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                @product.Unit
+                                    </td>
+
+                                    <td>
+                                @if (product.StockStatus == "Yeterli Stok")
+                                {
+                                                <span class="stock-badge stock-success">
+                                                    ● Yeterli
+                                                </span>
+                                }
+                                else if (product.StockStatus == "Düşük Stok")
+                                {
+                                                <span class="stock-badge stock-warning">
+                                                    ● Düşük
+                                                </span>
+                                }
+                                else
+                                {
+                                                <span class="stock-badge stock-danger">
+                                                    ● Stok Yok
+                                                </span>
+                                }
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <div class="table-actions">
+
+                                            <a asp-controller="Products"
+                                               asp-action="Edit"
+                                               asp-route-id="@product.Id"
+                                               class="action-button edit-button"
+                                               title="Düzenle">
+                                                Düzenle
+                                            </a>
+
+                                            <a asp-controller="Products"
+                                               asp-action="Delete"
+                                               asp-route-id="@product.Id"
+                                               class="action-button delete-button"
+                                               title="Sil">
+                                                Sil
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                    }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+    }
+    else
+    {
+            <div class="products-empty">
+
+                <div class="empty-icon">📦</div>
+
+                <h4>Ürün bulunamadı</h4>
+
+                <p>
+                    Arama veya kategori filtrelerini değiştirerek tekrar deneyebilirsiniz.
+                </p>
+
+            </div>
+    }
+
+</div>
