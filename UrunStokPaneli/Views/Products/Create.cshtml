@@ -1,57 +1,165 @@
 ﻿@model UrunStokPaneli.Models.Product
 
-<h1>Ürün Ekle</h1>
-@if (ViewBag.ErrorMessage != null)
-{
-        <div style="color:red; margin-bottom:20px;">
-        @ViewBag.ErrorMessage
-        </div>
+@{
+    ViewData["Title"] = "Yeni Ürün";
 }
 
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+<div class="form-page-header">
     <div>
-        <label>Ürün Kodu</label>
-        <input asp-for="ProductCode" />
-        <span asp-validation-for="ProductCode" class="text-danger"></span>
+        <h1>Yeni Ürün</h1>
+        <p>Sisteme yeni bir ürün ekleyin.</p>
     </div>
 
-    <div>
-        <label>Ürün Adı</label>
-        <input asp-for="ProductName" />
-        <span asp-validation-for="ProductName" class="text-danger"></span>
+    <a asp-controller="Products"
+       asp-action="Index"
+       class="btn btn-light form-back-button">
+        ← Ürünlere Dön
+    </a>
+</div>
+
+<div class="form-card product-form-card">
+
+    <div class="form-card-header">
+        <div class="form-card-icon">
+            +
+        </div>
+
+        <div>
+            <h3>Ürün Bilgileri</h3>
+            <p>Yeni ürünün bilgilerini aşağıdaki alanlara girin.</p>
+        </div>
     </div>
 
-    <div>
-        <label>Stok Miktarı</label>
-        <input asp-for="StockQuantity" />
-        <span asp-validation-for="StockQuantity" class="text-danger"></span>
-    </div>
+    @if (ViewBag.ErrorMessage != null)
+    {
+            <div class="form-error-message">
+            @ViewBag.ErrorMessage
+            </div>
+    }
 
-    <div>
-        <label>Birim</label>
-        <input asp-for="Unit" />
-        <span asp-validation-for="Unit" class="text-danger"></span>
-    </div>
+    <form asp-action="Create" method="post">
 
-    <div>
-        <label>Kategori</label>
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger validation-summary"></div>
 
-        <select asp-for="CategoryId">
-            <option value="">Kategori Seçiniz</option>
+        <div class="row g-4">
 
-            <!-- Controller'da hazırladığımız: ViewBag.Categories = categories; burada kullanılıyor. -->
-            @foreach (var category in ViewBag.Categories)
-            {
-                    <option value="@category.Id">
-                    @category.Name
+            <div class="col-md-6">
+
+                <label asp-for="ProductCode" class="form-label">
+                    Ürün Kodu
+                </label>
+
+                <input asp-for="ProductCode"
+                       class="form-control"
+                       placeholder="Örn. URN-001" />
+
+                <span asp-validation-for="ProductCode"
+                      class="text-danger field-validation"></span>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label asp-for="ProductName" class="form-label">
+                    Ürün Adı
+                </label>
+
+                <input asp-for="ProductName"
+                       class="form-control"
+                       placeholder="Ürün adını girin" />
+
+                <span asp-validation-for="ProductName"
+                      class="text-danger field-validation"></span>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label asp-for="StockQuantity" class="form-label">
+                    Stok Miktarı
+                </label>
+
+                <input asp-for="StockQuantity"
+                       type="number"
+                       min="0"
+                       class="form-control"
+                       placeholder="Stok miktarını girin" />
+
+                <span asp-validation-for="StockQuantity"
+                      class="text-danger field-validation"></span>
+
+                <div class="form-help">
+                    Ürünün başlangıç stok miktarını girin.
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label asp-for="Unit" class="form-label">
+                    Birim
+                </label>
+
+                <input asp-for="Unit"
+                       class="form-control"
+                       placeholder="Örn. Adet, Kg, Litre" />
+
+                <span asp-validation-for="Unit"
+                      class="text-danger field-validation"></span>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label asp-for="CategoryId" class="form-label">
+                    Kategori
+                </label>
+
+                <select asp-for="CategoryId"
+                        class="form-select">
+
+                    <option value="">
+                        Kategori Seçiniz
                     </option>
-            }
-        </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
 
-    <button type="submit">Kaydet</button>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                            <option value="@category.Id">
+                            @category.Name
+                            </option>
+                    }
 
-</form>
+                </select>
+
+                <span asp-validation-for="CategoryId"
+                      class="text-danger field-validation"></span>
+
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <a asp-controller="Products"
+               asp-action="Index"
+               class="btn btn-light cancel-button">
+                İptal
+            </a>
+
+            <button type="submit"
+                    class="btn btn-primary save-button">
+                ✓ Ürünü Kaydet
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -989,3 +989,226 @@ body {
         padding: 18px;
     }
 }
+
+/* =========================================
+   YENÝ ÜRÜN / FORM SAYFALARI
+========================================= */
+
+.form-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+    .form-page-header h1 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .form-page-header p {
+        margin: 6px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+.form-back-button {
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 9px 15px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+    .form-back-button:hover {
+        background: #f8fafc;
+        color: #111827;
+    }
+
+
+/* FORM KARTI */
+
+.product-form-card {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.form-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 25px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.form-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.form-card-header h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.form-card-header p {
+    margin: 4px 0 0;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+
+/* FORM ÝÇERÝÐÝ */
+
+.product-form-card form {
+    padding: 25px;
+}
+
+.product-form-card .form-label {
+    margin-bottom: 7px;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.product-form-card .form-control,
+.product-form-card .form-select {
+    min-height: 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: #374151;
+    font-size: 13px;
+    box-shadow: none;
+}
+
+    .product-form-card .form-control:focus,
+    .product-form-card .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .product-form-card .form-control::placeholder {
+        color: #9ca3af;
+    }
+
+.form-help {
+    margin-top: 6px;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.field-validation {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+}
+
+
+/* HATA MESAJI */
+
+.form-error-message {
+    margin: 20px 25px 0;
+    padding: 11px 13px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 12px;
+}
+
+.validation-summary {
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+
+/* FORM BUTONLARI */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.cancel-button {
+    min-width: 90px;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 9px 15px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+    .cancel-button:hover {
+        background: #f8fafc;
+        color: #111827;
+    }
+
+.save-button {
+    min-width: 130px;
+    border-radius: 8px;
+    padding: 9px 15px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* MOBÝL */
+
+@media (max-width: 768px) {
+
+    .form-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-back-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .product-form-card {
+        width: 100%;
+    }
+
+    .form-card-header {
+        padding: 20px;
+    }
+
+    .product-form-card form {
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-button,
+    .save-button {
+        width: 100%;
+    }
+}
