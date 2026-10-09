@@ -1,31 +1,73 @@
 ﻿@model UrunStokPaneli.Models.Product
+ 
+@{
+    ViewData["Title"] = "Ürün Sil";
+}
 
-<h1>Ürün Sil</h1>
+<div class="form-page-header">
+    <div>
+        <a asp-controller="Products"
+           asp-action="Index"
+           class="btn btn-light form-back-button">
+            ← Ürünlere Dön
+       </a>
 
-<p>Bu ürünü silmek istediğinize emin misiniz?</p>
+       <h1 class="mt-3">Ürün Silme Onayı</h1>
+    </div>
+</div>
 
-<p>
-    <strong>Ürün Kodu:</strong> @Model.ProductCode
-</p>
+<div class="form-card product-form-card">
+    <div class="form-card-header">
+        <div class="form-card-icon">
+            !
+        </div>
 
-<p>
-    <strong>Ürün Adı:</strong> @Model.ProductName
-</p>
+        <div>
+            <h3>Ürünü Silmek Üzeresiniz</h3>
+            <p>Silme işleminden önce ürün bilgilerini kontrol edin.</p>
+        </div>
+    </div>
 
-<p>
-    <strong>Stok Miktarı:</strong> @Model.StockQuantity @Model.Unit
-</p>
+    <div class="p-4">
+        <div class="alert alert-danger">
+            <strong>Dikkat!</strong>
+            Bu ürünü silmek istediğinizden emin misiniz?
+            Bu işlem geri alınamaz.
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <label class="form-label">Ürün Kodu</label>
+                <div class="form-control bg-light">@Model.ProductCode</div>
+            </div>
 
-<p>
-    <strong>Kategori:</strong> @Model.Category.Name
-</p>
+            <div class="col-md-6">
+                <label class="form-label">Ürün Adı</label>
+                <div class="form-control bg-light">@Model.ProductName</div>
+            </div>
 
-<form asp-action="DeleteConfirmed" method="post">
+            <div class="col-md-6">
+                <label class="form-label">Stok Miktarı</label>
+                <div class="form-control bg-light">@Model.StockQuantity @Model.Unit</div>
+            </div>
 
-    <input type="hidden" asp-for="Id" />
+            <div class="col-md-6">
+                <label class="form-label">Kategori</label>
+                <div class="form-control bg-light">@Model.Category?.Name</div>
+            </div>
+        </div>
 
-    <button type="submit">Sil</button>
-
-    <a asp-action="Index">İptal</a>
-
-</form>
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" asp-for="Id"/>
+            <div class="form-actions">
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   class="btn btn-light cancel-button">
+                    İptal
+               </a>
+               <button type="submit" class="btn btn-danger">
+                    Ürünü Sil
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
