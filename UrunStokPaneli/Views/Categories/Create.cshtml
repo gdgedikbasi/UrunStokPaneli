@@ -1,13 +1,68 @@
 ﻿@model UrunStokPaneli.Models.Category //sayfanın tek bir Category nesnesi ile çalışacağını belirttim.
 
-<h1>Kategori Ekle</h1>
+@{
+    ViewData["Title"] = "Kategori Ekle";
+}
 
-<form asp-action="Create" method="post">
+<div class="form-page-header">
     <div>
-        <label>Kategori Adı</label>
-        <input asp-for="Name" /> <!-- kullanıcının kategori adını gireceği kutuyu oluşturuyor. -->
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-light form-back-button">
+             ← Kategorilere Dön
+        </a>
+
+        <h1 class="mt-3">Yeni Kategori Ekle</h1>
+    </div>
+</div>
+
+<div class="form-card product-form-card">
+    <div class="form-card-header">
+        <div class="form-card-icon">
+            +
+        </div>
+
+        <div>
+            <h3>Kategori Bilgileri</h3>
+            <p>Sisteme yeni bir ürün kategorisi ekleyin.</p>
+        </div>
     </div>
 
-    <button type="submit">Kaydet</button> <!-- kullanıcı Kaydet butonuna bastığında bilgilerin CategoriesController içerisindeki 
-                                           Create metoduna POST olarak gönderileceğini söylüyor. -->
-</form>
+    <form asp-action="Create" method="post">
+        <div class="p-4">
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger validation-summary"></div>
+
+            <div class="mb-4">
+                <label asp-for="Name" class="form-label">
+                    Kategori Adı
+                </label>
+
+                <input asp-for="Name"
+                       class="form-control"
+                       placeholder="Örn. Elektronik, Gıda, Temizlik" />
+
+                <span asp-validation-for="Name"
+                      class="text-danger field-validation"></span>
+            </div>
+             <div class="form-actions">
+
+                <a asp-controller="Categories"
+                   asp-action="Index"
+                   class="btn btn-light cancel-button">
+                    İptal
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary save-button">
+                    ✓ Kategoriyi Kaydet
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
