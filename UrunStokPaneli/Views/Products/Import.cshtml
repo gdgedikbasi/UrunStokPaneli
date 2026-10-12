@@ -1,6 +1,68 @@
-﻿<h1>Excel'den Ürün Aktar</h1>
+﻿@{
+    ViewData["Title"] = "Excel Aktarımı";
+}
 
-<form asp-action="Import" method="post" enctype="multipart/form-data"> <!-- *enctype="multipart/form-data"* bu metod, formun dosya gönderebilmesini sağlar  -->
-    <input type="file" name="file"/>
-    <button type="submit">Aktar</button>
-</form>
+<div class="page-header">
+    <div>
+        <h1>Excel Aktarımı</h1>
+        <p>Excel dosyanızdaki ürünleri stok sistemine aktarın.</p>
+    </div>
+</div>
+
+<div class="form-card product-form-card">
+    <div class="form-card-header">
+        <div class="form-card-icon">
+            ↑
+        </div>
+        <div>
+            <h3>Excel Dosyası Yükle</h3>
+            <p>Aktarmak istediğiniz Excel dosyasını seçin.</p>
+        </div>
+    </div>,
+    <div class="p-4">
+
+        <div class="alert alert-info">
+            <strong>Bilgilendirme:</strong>
+            Yalnızca .xlsx uzantılı Excel dosyaları yükleyebilirsiniz.
+        </div>
+
+        <form asp-controller="Products"
+              asp-action="Import"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="mb-4">
+                <label for="file" class="form-label">
+                    Excel Dosyası
+                </label>
+
+                <input type="file"
+                       id="file"
+                       name="file"
+                       class="form-control"
+                       accept=".xlsx"
+                       required />
+
+                <div class="form-help">
+                    Bilgisayarınızdan bir .xlsx dosyası seçin.
+                </div>
+            </div>
+
+            <div class="form-actions">
+
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   class="btn btn-light cancel-button">
+                    İptal
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary save-button">
+                    ↑ Excel'den Aktar
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
